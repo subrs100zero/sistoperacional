@@ -2,13 +2,10 @@ import threading
 import random
 import time
 
-# Semáforo para gerenciar o acesso às caixas
 caixas_semaforo = threading.Semaphore(3)
 
-# Tamanho máximo da fila de espera
 tamanho_fila = 30
 
-# Função que representa o atendimento de um cliente
 def atender_cliente(cliente_id):
     tempo_atendimento = random.randint(3, 10)
     print(f'Cliente {cliente_id} chegou e vai ser atendido em {tempo_atendimento} segundos.')
@@ -18,25 +15,20 @@ def atender_cliente(cliente_id):
     with caixas_semaforo:
         print(f'Cliente {cliente_id} está sendo atendido.')
 
-# Função que simula a chegada de clientes
 def chegada_clientes():
     for cliente_id in range(1, tamanho_fila + 1):
         cliente_thread = threading.Thread(target=atender_cliente, args=(cliente_id,))
         cliente_thread.start()
 
-        # Tempo entre a chegada de clientes
         tempo_chegada = random.uniform(0.5, 2)
         time.sleep(tempo_chegada)
 
-# Início da simulação
 if __name__ == "__main__":
     print("Simulação da fila de atendimento de um banco com 3 caixas")
 
-    # Crie uma thread para simular a chegada de clientes
     chegada_thread = threading.Thread(target=chegada_clientes)
     chegada_thread.start()
 
-    # Aguarde a chegada_thread terminar para encerrar a simulação
     chegada_thread.join()
 
     print("Todos os clientes foram atendidos.")
